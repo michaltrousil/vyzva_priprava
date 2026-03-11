@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Výzva Příprava | Atletika Líbeznice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1 class="logo">Výzva Příprava</h1>
+            <nav class="nav">
+                <button class="nav-btn active" data-view="challenge">Dnešní výzva</button>
+                <button class="nav-btn" data-view="entry">Zadat splnění</button>
+                <button class="nav-btn" data-view="leaderboard">Žebříček</button>
+            </nav>
+        </header>
+
+        <!-- Loading overlay -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Načítám...</p>
+        </div>
+
+        <!-- View 1: Dnešní výzva -->
+        <div id="challenge-view" class="view">
+            <div class="card">
+                <p class="day-name" id="current-day">Dnes je: ...</p>
+
+                <div class="challenge-card">
+                    <h2 class="challenge-name" id="challenge-name">Načítám...</h2>
+                    <p class="challenge-duration" id="challenge-duration"></p>
+                    <span class="challenge-points" id="challenge-points"></span>
+                </div>
+
+                <div class="video-container" id="video-container">
+                    <div class="video-placeholder">
+                        <p>Video bude brzy k dispozici</p>
+                    </div>
+                </div>
+
+                <div class="exercise-description" id="exercise-description">
+                    <h3>Popis cvičení</h3>
+                    <ul id="exercise-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 2: Zadat splnění -->
+        <div id="entry-view" class="view hidden">
+            <div class="card">
+                <h2>Zaznamenat splnění</h2>
+
+                <div class="form-group">
+                    <label for="athlete-select">Vyber své jméno</label>
+                    <select id="athlete-select" class="input-field">
+                        <option value="">-- Vyber atleta --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Za který den?</label>
+                    <div class="day-buttons">
+                        <button class="day-btn active" data-day="today">Dnes</button>
+                        <button class="day-btn" data-day="yesterday">Včera</button>
+                    </div>
+                    <p id="selected-date" class="date-display"></p>
+                </div>
+
+                <div id="entry-challenge-info" class="challenge-card">
+                    <h3 class="challenge-name" id="entry-challenge-name">Načítám...</h3>
+                    <p class="challenge-duration" id="entry-challenge-duration"></p>
+                </div>
+
+                <div id="existing-entry" class="existing-entry hidden">
+                    <p>Pro tento den již máš záznam.</p>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="completed-checkbox">
+                        <label for="completed-checkbox">Splněno</label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="value-group">
+                    <label for="value-input" id="value-label">Počet minut</label>
+                    <input type="number" id="value-input" class="input-field" min="1" placeholder="Zadej hodnotu">
+                </div>
+
+                <div class="form-group">
+                    <label for="note-input">Poznámka (volitelné)</label>
+                    <textarea id="note-input" class="input-field" placeholder="Napiš krátkou poznámku..."></textarea>
+                </div>
+
+                <button id="submit-btn" class="submit-btn" disabled>Odeslat</button>
+
+                <div id="success-message" class="success-message hidden">
+                    <div class="success-icon">✓</div>
+                    <p>Splnění bylo zaznamenáno!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- View 3: Žebříček -->
+        <div id="leaderboard-view" class="view hidden">
+            <div class="card">
+                <h2>Žebříček</h2>
+
+                <div class="stats-summary">
+                    <div class="stat-box">
+                        <span class="stat-value" id="total-points">0</span>
+                        <span class="stat-label">Celkem bodů</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="active-athletes">0</span>
+                        <span class="stat-label">Aktivních atletů</span>
+                    </div>
+                </div>
+
+                <div class="leaderboard-table-container">
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Jméno</th>
+                                <th>Body</th>
+                                <th>Dnů</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <button id="refresh-btn" class="refresh-btn">Obnovit</button>
+            </div>
+        </div>
+
+        <!-- Error message -->
+        <div id="error-message" class="error-message hidden">
+            <p id="error-text"></p>
+            <button id="error-close" class="error-close">&times;</button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
