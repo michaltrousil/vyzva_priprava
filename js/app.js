@@ -4,7 +4,7 @@
  */
 
 // === KONFIGURACE ===
-const API_URL = 'https://script.google.com/macros/s/AKfycbxDTvU-WIDD-Mk1-trqtcG85cdOiVtWzyRI-HTFRpMaPOBdrQX4S44qY6krXXwNouFy/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxXpe4SUXtP9CwENx9EMKE6BEhuJ4MfJBsZ_k6QltiBPvQF2QK0_uQEDCixUQ1xUPbx/exec';
 const VERSION = 'priprava';
 
 /**
