@@ -4,7 +4,7 @@
  */
 
 // === KONFIGURACE ===
-const API_URL = 'VLOŽTE_SVOU_GOOGLE_APPS_SCRIPT_URL';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxDTvU-WIDD-Mk1-trqtcG85cdOiVtWzyRI-HTFRpMaPOBdrQX4S44qY6krXXwNouFy/exec';
 const VERSION = 'priprava';
 
 // Cache klíče
