@@ -7,6 +7,19 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbxDTvU-WIDD-Mk1-trqtcG85cdOiVtWzyRI-HTFRpMaPOBdrQX4S44qY6krXXwNouFy/exec';
 const VERSION = 'priprava';
 
+/**
+ * Helper pro API volání - řeší CORS s Google Apps Script
+ */
+async function fetchAPI(url) {
+    const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'omit',
+        redirect: 'follow'
+    });
+    return response.json();
+}
+
 // Cache klíče
 const CACHE_KEYS = {
     athletes: 'priprava_athletes',
@@ -412,8 +425,7 @@ async function loadAthletes() {
     // Načíst čerstvá data
     try {
         const url = `${API_URL}?action=getAthletes&version=${VERSION}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        const data = await fetchAPI(url);
 
         if (data.athletes) {
             state.athletes = data.athletes;
@@ -442,8 +454,7 @@ async function loadExistingEntry() {
     try {
         const date = formatDateForAPI(getDateForDay(state.selectedDay));
         const url = `${API_URL}?action=getEntry&version=${VERSION}&athlete=${encodeURIComponent(state.selectedAthlete)}&date=${date}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        const data = await fetchAPI(url);
 
         if (data.entry) {
             state.existingEntry = data.entry;
@@ -498,8 +509,7 @@ async function submitEntry() {
         });
 
         const url = `${API_URL}?${params.toString()}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        const data = await fetchAPI(url);
 
         if (data.success) {
             // Invalidovat cache žebříčku
@@ -549,8 +559,7 @@ async function loadLeaderboard(forceRefresh = false) {
 
     try {
         const url = `${API_URL}?action=getLeaderboard&version=${VERSION}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        const data = await fetchAPI(url);
 
         if (data.leaderboard) {
             state.leaderboard = data.leaderboard;
