@@ -103,36 +103,6 @@ body {
 }
 
 /* === CHALLENGE VIEW === */
-.day-switcher {
-    display: flex;
-    gap: 5px;
-    justify-content: center;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-}
-
-.day-switch-btn {
-    padding: 8px 12px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 700;
-    border: 2px solid var(--primary);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--primary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.day-switch-btn:hover {
-    background: rgba(51, 181, 229, 0.2);
-}
-
-.day-switch-btn.active {
-    background: var(--primary);
-    color: var(--text-light);
-}
-
 .day-name {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;

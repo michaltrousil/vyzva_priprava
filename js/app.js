@@ -130,8 +130,7 @@ const state = {
     selectedDay: 'today',
     currentView: 'challenge',
     leaderboard: [],
-    existingEntry: null,
-    previewDay: null // Pro přepínání dnů v náhledu (null = dnes)
+    existingEntry: null
 };
 
 // === POMOCNÉ FUNKCE ===
@@ -241,16 +240,7 @@ function showSuccess() {
  * Aktualizuje zobrazení dnešní výzvy
  */
 function renderChallengeView() {
-    // Použij náhledový den pokud je nastavený, jinak dnešní
-    const exercise = state.previewDay
-        ? { ...EXERCISES[state.previewDay], dayKey: state.previewDay, dayName: DAY_NAMES[state.previewDay] }
-        : getTodayExercise();
-
-    // Aktualizuj aktivní tlačítko přepínače
-    const currentDayKey = state.previewDay || getDayKey(new Date());
-    document.querySelectorAll('.day-switch-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.day === currentDayKey);
-    });
+    const exercise = getTodayExercise();
 
     document.getElementById('current-day').textContent = `Dnes je: ${exercise.dayName}`;
     document.getElementById('challenge-name').textContent = exercise.name;
@@ -635,13 +625,6 @@ function handleErrorClose() {
     document.getElementById('error-message').classList.add('hidden');
 }
 
-function handleDaySwitcher(e) {
-    const day = e.target.dataset.day;
-    if (!day) return;
-
-    state.previewDay = day;
-    renderChallengeView();
-}
 
 // === DEMO MÓD ===
 
@@ -666,10 +649,6 @@ function init() {
         btn.addEventListener('click', handleNavigation);
     });
 
-    // Event listenery - přepínač dnů
-    document.querySelectorAll('.day-switch-btn').forEach(btn => {
-        btn.addEventListener('click', handleDaySwitcher);
-    });
 
     // Event listenery - formulář
     document.getElementById('athlete-select').addEventListener('change', handleAthleteSelect);
