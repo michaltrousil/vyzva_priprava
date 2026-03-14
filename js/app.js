@@ -37,14 +37,9 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videos: [],
-        description: [
-            'Protažení lýtek',
-            'Protažení achilovek',
-            'Protažení hamstringů',
-            'Protažení přitahovačů stehen',
-            'Protažení hýždí'
-        ]
+        videos: ['https://www.youtube.com/watch?v=S4qP5x6He0Q'],
+        videoTitle: 'Inspirace pro protažení',
+        description: []
     },
     tuesday: {
         name: 'Core posilka',
@@ -64,14 +59,9 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videos: [],
-        description: [
-            'Protažení lýtek',
-            'Protažení achilovek',
-            'Protažení hamstringů',
-            'Protažení přitahovačů stehen',
-            'Protažení hýždí'
-        ]
+        videos: ['https://www.youtube.com/watch?v=S4qP5x6He0Q'],
+        videoTitle: 'Inspirace pro protažení',
+        description: []
     },
     thursday: {
         name: 'Core posilka',
