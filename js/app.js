@@ -83,7 +83,8 @@ const EXERCISES = {
         pointsPerUnit: 300,
         inputType: 'jumps',
         inputLabel: 'Počet přeskoků',
-        videos: [],
+        videos: ['https://www.svihej.cz/blog/workout-s-luckou-pro-naproste-zacatecniky/'],
+        videoTitle: 'Inspirace pro švihadlo',
         description: []
     },
     saturday: {
@@ -95,7 +96,8 @@ const EXERCISES = {
         pointsPerUnit: 300,
         inputType: 'jumps',
         inputLabel: 'Počet přeskoků',
-        videos: [],
+        videos: ['https://www.svihej.cz/blog/workout-s-luckou-pro-naproste-zacatecniky/'],
+        videoTitle: 'Inspirace pro švihadlo',
         description: []
     },
     sunday: {
