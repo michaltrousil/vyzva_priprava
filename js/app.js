@@ -37,12 +37,13 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videoUrl: null, // Doplnit YouTube URL
+        videos: [],
         description: [
-            'Protažení zádových svalů',
-            'Protažení nohou (hamstringy, lýtka)',
-            'Uvolnění kyčlí',
-            'Protažení ramen a paží'
+            'Protažení lýtek',
+            'Protažení achilovek',
+            'Protažení hamstringů',
+            'Protažení přitahovačů stehen',
+            'Protažení hýždí'
         ]
     },
     tuesday: {
@@ -52,13 +53,9 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videoUrl: null,
-        description: [
-            'Plank 3x30s',
-            'Bicykl 3x20 opakování',
-            'Ruský twist 3x15 na stranu',
-            'Dead bug 3x10 na stranu'
-        ]
+        videos: ['https://www.instagram.com/p/DU-MnOmiKQG/?img_index=8&igsh=MWt3OTRhZ2l4Mm1tZw=='],
+        videoTitle: 'Inspirace na cviky',
+        description: []
     },
     wednesday: {
         name: 'Protažení po tréninku',
@@ -67,12 +64,13 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videoUrl: null,
+        videos: [],
         description: [
-            'Protažení zádových svalů',
-            'Protažení nohou (hamstringy, lýtka)',
-            'Uvolnění kyčlí',
-            'Protažení ramen a paží'
+            'Protažení lýtek',
+            'Protažení achilovek',
+            'Protažení hamstringů',
+            'Protažení přitahovačů stehen',
+            'Protažení hýždí'
         ]
     },
     thursday: {
@@ -82,30 +80,21 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videoUrl: null,
-        description: [
-            'Plank 3x30s',
-            'Bicykl 3x20 opakování',
-            'Ruský twist 3x15 na stranu',
-            'Dead bug 3x10 na stranu'
-        ]
+        videos: ['https://www.instagram.com/p/DU-MnOmiKQG/?img_index=8&igsh=MWt3OTRhZ2l4Mm1tZw=='],
+        videoTitle: 'Inspirace na cviky',
+        description: []
     },
     friday: {
         name: 'Švihadlo full trénink',
         type: 'jumprope',
         duration: '1000+ přeskoků',
-        points: null, // Dynamické - 1 bod / 300 skoků
+        points: null,
         maxValue: 1500,
         pointsPerUnit: 300,
         inputType: 'jumps',
         inputLabel: 'Počet přeskoků',
-        videoUrl: null,
-        description: [
-            'Základní přeskoky',
-            'Střídavé nohy',
-            'Dvojšvihy (pokročilí)',
-            'Cíl: minimálně 1000 přeskoků'
-        ]
+        videos: [],
+        description: []
     },
     saturday: {
         name: 'Švihadlo full trénink',
@@ -116,13 +105,8 @@ const EXERCISES = {
         pointsPerUnit: 300,
         inputType: 'jumps',
         inputLabel: 'Počet přeskoků',
-        videoUrl: null,
-        description: [
-            'Základní přeskoky',
-            'Střídavé nohy',
-            'Dvojšvihy (pokročilí)',
-            'Cíl: minimálně 1000 přeskoků'
-        ]
+        videos: [],
+        description: []
     },
     sunday: {
         name: 'Core posilka',
@@ -131,13 +115,9 @@ const EXERCISES = {
         points: 2,
         inputType: 'minutes',
         inputLabel: 'Počet minut',
-        videoUrl: null,
-        description: [
-            'Plank 3x30s',
-            'Bicykl 3x20 opakování',
-            'Ruský twist 3x15 na stranu',
-            'Dead bug 3x10 na stranu'
-        ]
+        videos: ['https://www.instagram.com/p/DU-MnOmiKQG/?img_index=8&igsh=MWt3OTRhZ2l4Mm1tZw=='],
+        videoTitle: 'Inspirace na cviky',
+        description: []
     }
 };
 
@@ -160,7 +140,8 @@ const state = {
     selectedDay: 'today',
     currentView: 'challenge',
     leaderboard: [],
-    existingEntry: null
+    existingEntry: null,
+    previewDay: null // Pro přepínání dnů v náhledu (null = dnes)
 };
 
 // === POMOCNÉ FUNKCE ===
@@ -270,7 +251,16 @@ function showSuccess() {
  * Aktualizuje zobrazení dnešní výzvy
  */
 function renderChallengeView() {
-    const exercise = getTodayExercise();
+    // Použij náhledový den pokud je nastavený, jinak dnešní
+    const exercise = state.previewDay
+        ? { ...EXERCISES[state.previewDay], dayKey: state.previewDay, dayName: DAY_NAMES[state.previewDay] }
+        : getTodayExercise();
+
+    // Aktualizuj aktivní tlačítko přepínače
+    const currentDayKey = state.previewDay || getDayKey(new Date());
+    document.querySelectorAll('.day-switch-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.day === currentDayKey);
+    });
 
     document.getElementById('current-day').textContent = `Dnes je: ${exercise.dayName}`;
     document.getElementById('challenge-name').textContent = exercise.name;
@@ -285,21 +275,48 @@ function renderChallengeView() {
     }
     document.getElementById('challenge-points').textContent = pointsText;
 
-    // Video
+    // Video(a) - jako odkazy na YouTube
     const videoContainer = document.getElementById('video-container');
-    if (exercise.videoUrl) {
-        videoContainer.innerHTML = `<iframe src="${exercise.videoUrl}" allowfullscreen></iframe>`;
-    } else {
-        videoContainer.innerHTML = `
-            <div class="video-placeholder">
-                <p>Video bude brzy k dispozici</p>
-            </div>
-        `;
+
+    // Vrátí URL pro odkaz (YouTube embed převede na watch, ostatní ponechá)
+    function toLinkUrl(url) {
+        if (url.includes('youtube.com/embed/')) {
+            return url.replace('youtube.com/embed/', 'youtube.com/watch?v=');
+        }
+        return url;
     }
 
-    // Popis cvičení
+    if (exercise.videos && exercise.videos.length > 0) {
+        const validVideos = exercise.videos.filter(url => url !== null);
+        if (validVideos.length > 0) {
+            const title = exercise.videoTitle || '';
+            videoContainer.innerHTML = `
+                <div class="video-links">
+                    ${title ? `<h3 class="video-title">${title}</h3>` : ''}
+                    ${validVideos.map((url, i) => `
+                        <a href="${toLinkUrl(url)}" target="_blank" class="video-link">
+                            <span class="play-icon">▶</span>
+                            ${validVideos.length > 1 ? `Video ${i + 1}` : 'Přehrát video'}
+                        </a>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            videoContainer.innerHTML = '';
+        }
+    } else {
+        videoContainer.innerHTML = '';
+    }
+
+    // Popis cvičení - zobrazit pouze pokud existuje
+    const descriptionEl = document.getElementById('exercise-description');
     const list = document.getElementById('exercise-list');
-    list.innerHTML = exercise.description.map(item => `<li>${item}</li>`).join('');
+    if (exercise.description && exercise.description.length > 0) {
+        descriptionEl.classList.remove('hidden');
+        list.innerHTML = exercise.description.map(item => `<li>${item}</li>`).join('');
+    } else {
+        descriptionEl.classList.add('hidden');
+    }
 }
 
 /**
@@ -628,6 +645,14 @@ function handleErrorClose() {
     document.getElementById('error-message').classList.add('hidden');
 }
 
+function handleDaySwitcher(e) {
+    const day = e.target.dataset.day;
+    if (!day) return;
+
+    state.previewDay = day;
+    renderChallengeView();
+}
+
 // === DEMO MÓD ===
 
 function loadDemoData() {
@@ -649,6 +674,11 @@ function init() {
     // Event listenery - navigace
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', handleNavigation);
+    });
+
+    // Event listenery - přepínač dnů
+    document.querySelectorAll('.day-switch-btn').forEach(btn => {
+        btn.addEventListener('click', handleDaySwitcher);
     });
 
     // Event listenery - formulář

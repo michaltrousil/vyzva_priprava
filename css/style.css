@@ -103,6 +103,36 @@ body {
 }
 
 /* === CHALLENGE VIEW === */
+.day-switcher {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.day-switch-btn {
+    padding: 8px 12px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.day-switch-btn:hover {
+    background: rgba(51, 181, 229, 0.2);
+}
+
+.day-switch-btn.active {
+    background: var(--primary);
+    color: var(--text-light);
+}
+
 .day-name {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
@@ -158,6 +188,46 @@ body {
     padding: 40px 20px;
     text-align: center;
     color: var(--text-muted);
+}
+
+.video-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+}
+
+.video-title {
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.video-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 30px;
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(51, 181, 229, 0.3);
+}
+
+.video-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(51, 181, 229, 0.5);
+}
+
+.video-link .play-icon {
+    font-size: 1.3rem;
 }
 
 .video-placeholder a {
