@@ -130,7 +130,8 @@ const state = {
     selectedDay: 'today',
     currentView: 'challenge',
     leaderboard: [],
-    existingEntry: null
+    existingEntry: null,
+    previewDay: null
 };
 
 // === POMOCNÉ FUNKCE ===
@@ -240,7 +241,14 @@ function showSuccess() {
  * Aktualizuje zobrazení dnešní výzvy
  */
 function renderChallengeView() {
-    const exercise = getTodayExercise();
+    const exercise = state.previewDay
+        ? { ...EXERCISES[state.previewDay], dayKey: state.previewDay, dayName: DAY_NAMES[state.previewDay] }
+        : getTodayExercise();
+
+    const currentDayKey = state.previewDay || getDayKey(new Date());
+    document.querySelectorAll('.day-switch-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.day === currentDayKey);
+    });
 
     document.getElementById('current-day').textContent = `Dnes je: ${exercise.dayName}`;
     document.getElementById('challenge-name').textContent = exercise.name;
@@ -625,6 +633,13 @@ function handleErrorClose() {
     document.getElementById('error-message').classList.add('hidden');
 }
 
+function handleDaySwitcher(e) {
+    const day = e.target.dataset.day;
+    if (!day) return;
+    state.previewDay = day;
+    renderChallengeView();
+}
+
 
 // === DEMO MÓD ===
 
@@ -647,6 +662,11 @@ function init() {
     // Event listenery - navigace
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', handleNavigation);
+    });
+
+    // Event listenery - přepínač dnů
+    document.querySelectorAll('.day-switch-btn').forEach(btn => {
+        btn.addEventListener('click', handleDaySwitcher);
     });
 
 
